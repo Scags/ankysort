@@ -1,3 +1,15 @@
+#ifndef ANKYSORT
+#define ANKYSORT
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 void ankysort(int *array, unsigned long n)
 {
 	unsigned long i, u, h, l, lowval, highval;
@@ -43,3 +55,9 @@ void ankysort(int *array, unsigned long n)
 	free(array);
 	memcpy(array, array2, n*sizeof(array));
 }
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif	// ANKYSORT

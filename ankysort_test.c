@@ -5,28 +5,31 @@
 #include <ankysort.h>
 
 void* randlist(unsigned int, unsigned int);
+int comp(const void*, const void*);
 
 int main()
 {
 	unsigned int i;
 	const int n = 100;
-	int *p = ( int* )randlist(n, 100);
-	char s[1024] = "[";
+	int *p = ( int* )randlist(n, 10000);
+	int *p2 = ( int* )randlist(n, 10000);
+	clock_t *start, *end;
 
-	for (i = 0; i < n; ++i)
-		sprintf(s, "%s %d", s, p[i]);
+	start = malloc(2*sizeof(clock_t));
+	end = malloc(2*sizeof(clock_t));
 
-	printf("%s]\n", s);
-	memset(s, 0, strlen(s));
-	s[0] = '[';
-
+	start[0] = clock();
 	ankysort(p, n);
-	for (i = 0; i < n; ++i)
-		sprintf(s, "%s %d", s, p[i]);
+	end[0] = clock();
 
-	printf("%s]\n", s);
+	start[1] = clock();
+	qsort(p2, n, sizeof(int), comp);
+	end[1] = clock();
 
-	free(p);
+	printf("ankysort:%f\nqsort:%f\n", (end[0]-start[0])/( double )CLOCKS_PER_SEC, (end[1]-start[1])/( double )CLOCKS_PER_SEC);
+
+	free(start);
+	free(end);
 	return 0;
 }
 
@@ -42,4 +45,9 @@ void *randlist(unsigned int n, unsigned int r)
 		p[i] = rand() % r;
 
 	return p;
+}
+
+int comp(const void* a, const void* b)
+{
+	return (*( int* )a) - (*( int* )b);
 }
